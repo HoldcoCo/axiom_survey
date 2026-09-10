@@ -3,7 +3,6 @@
  * and sends it via nodemailer. Gracefully skips when SMTP is not configured.
  */
 
-import nodemailer from "nodemailer";
 import { LEVELS_AR } from "../src/data/levels.ar";
 import { LEVELS_EN } from "../src/data/levels.en";
 import { escapeHtml } from "../src/lib/serializeAnswers";
@@ -631,6 +630,7 @@ export async function sendReportEmail(
   const html = buildReportEmailHtml(payload);
 
   try {
+    const { default: nodemailer } = await import("nodemailer");
     const transport = nodemailer.createTransport({
       host: smtp.host,
       port: smtp.port,

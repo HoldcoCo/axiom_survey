@@ -3,7 +3,17 @@
  * Credentials stay server-side (ERPNEXT_* / FRAPPE_*).
  */
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { handleLeadRequest } from "../server/erpnextLead";
+
+/** Lazy-imported handler — defers module loading into the try-catch. */
+let _handleLeadRequest: typeof import("../server/erpnextLead").handleLeadRequest | null = null;
+
+async function getHandler(): Promise<typeof import("../server/erpnextLead").handleLeadRequest> {
+  if (_handleLeadRequest === null) {
+    const mod = await import("../server/erpnextLead");
+    _handleLeadRequest = mod.handleLeadRequest;
+  }
+  return _handleLeadRequest;
+}
 
 /** Simple in-memory rate limit: max N requests per IP per window. */
 const RATE_LIMIT_MAX = 8;
@@ -63,10 +73,13 @@ export default async function handler(
   }
 
   try {
+    const handleLeadRequest = await getHandler();
     const result = await handleLeadRequest(req.body);
     res.status(result.status).json(result.body);
-  } catch (err) {
-    console.error("[api/lead] Unhandled error", err);
-    res.status(502).json({ ok: false, error: "upstream" });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    const stack = err instanceof Error ? err.stack : undefined;
+    console.error("[api/lead] Unhandled error", message, stack);
+    res.status(502).json({ ok: false, error: "upstream", detail: message });
   }
 }
