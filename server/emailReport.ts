@@ -65,7 +65,9 @@ export function getSmtpConfig(): SmtpConfig | null {
     !user ||
     user.length === 0 ||
     !pass ||
-    pass.length === 0
+    pass.length === 0 ||
+    !from ||
+    from.length === 0
   ) {
     return null;
   }
