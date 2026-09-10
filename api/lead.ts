@@ -3,7 +3,7 @@
  * Credentials stay server-side (ERPNEXT_* / FRAPPE_*).
  */
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { handleLeadRequest } from "../server/erpnextLead";
+import { handleLeadRequest } from "../server/erpnextLead.js";
 
 /** Simple in-memory rate limit: max N requests per IP per window. */
 const RATE_LIMIT_MAX = 8;

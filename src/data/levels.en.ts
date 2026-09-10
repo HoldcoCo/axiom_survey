@@ -1,4 +1,4 @@
-import type { LevelData } from "../types";
+import type { LevelData } from "../types/index.js";
 
 /** English maturity level bands. */
 export const LEVELS_EN: LevelData[] = [

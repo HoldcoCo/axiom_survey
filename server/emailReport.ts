@@ -3,10 +3,10 @@
  * and sends it via nodemailer. Gracefully skips when SMTP is not configured.
  */
 
-import { LEVELS_AR } from "../src/data/levels.ar";
-import { LEVELS_EN } from "../src/data/levels.en";
-import { escapeHtml } from "../src/lib/serializeAnswers";
-import type { Lang, LevelData, SerializedAnswer } from "../src/types";
+import { LEVELS_AR } from "../src/data/levels.ar.js";
+import { LEVELS_EN } from "../src/data/levels.en.js";
+import { escapeHtml } from "../src/lib/serializeAnswers.js";
+import type { Lang, LevelData, SerializedAnswer } from "../src/types/index.js";
 
 /* ────────────────────────────── Types ────────────────────────────── */
 

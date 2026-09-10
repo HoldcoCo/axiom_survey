@@ -5,14 +5,14 @@
  * 2. Create an Opportunity linked to that Lead
  * 3. Attach Digital Health Check answers as a CRM Note on the Opportunity
  */
-import { mapToFrappeLead, mapToFrappeOpportunity } from "../src/lib/mapToFrappeLead";
-import { formatAnswersAsHtmlNote } from "../src/lib/serializeAnswers";
+import { mapToFrappeLead, mapToFrappeOpportunity } from "../src/lib/mapToFrappeLead.js";
+import { formatAnswersAsHtmlNote } from "../src/lib/serializeAnswers.js";
 import type {
   LeadFormData,
   LeadSubmissionPayload,
   SerializedAnswer,
-} from "../src/types";
-import { sendReportEmail } from "./emailReport";
+} from "../src/types/index.js";
+import { sendReportEmail } from "./emailReport.js";
 
 export interface ErpNextConfig {
   baseUrl: string;
