@@ -75,6 +75,7 @@ export default function FormScreen({
           return (
             <div key={field}>
               <button
+                type="button"
                 onClick={() => handleSameWa(!sameWa)}
                 style={{
                   display: "flex",

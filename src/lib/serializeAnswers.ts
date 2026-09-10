@@ -3,7 +3,7 @@ import type {
   OtherTextMap,
   QuestionData,
   SerializedAnswer,
-} from "@/types";
+} from "../types";
 
 /**
  * Resolves answer indices into human-readable labels for CRM / email.
