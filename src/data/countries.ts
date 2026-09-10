@@ -1,0 +1,33 @@
+import type { CountryDial } from "@/types";
+
+/** Dial-code list for the phone country selector (GCC-first, then regional/global). */
+export const COUNTRIES: CountryDial[] = [
+  { code: "AE", dial: "+971", flag: "🇦🇪", name: "UAE" },
+  { code: "SA", dial: "+966", flag: "🇸🇦", name: "Saudi Arabia" },
+  { code: "KW", dial: "+965", flag: "🇰🇼", name: "Kuwait" },
+  { code: "QA", dial: "+974", flag: "🇶🇦", name: "Qatar" },
+  { code: "BH", dial: "+973", flag: "🇧🇭", name: "Bahrain" },
+  { code: "OM", dial: "+968", flag: "🇴🇲", name: "Oman" },
+  { code: "EG", dial: "+20", flag: "🇪🇬", name: "Egypt" },
+  { code: "JO", dial: "+962", flag: "🇯🇴", name: "Jordan" },
+  { code: "LB", dial: "+961", flag: "🇱🇧", name: "Lebanon" },
+  { code: "IQ", dial: "+964", flag: "🇮🇶", name: "Iraq" },
+  { code: "MA", dial: "+212", flag: "🇲🇦", name: "Morocco" },
+  { code: "TN", dial: "+216", flag: "🇹🇳", name: "Tunisia" },
+  { code: "DZ", dial: "+213", flag: "🇩🇿", name: "Algeria" },
+  { code: "LY", dial: "+218", flag: "🇱🇾", name: "Libya" },
+  { code: "YE", dial: "+967", flag: "🇾🇪", name: "Yemen" },
+  { code: "SD", dial: "+249", flag: "🇸🇩", name: "Sudan" },
+  { code: "SY", dial: "+963", flag: "🇸🇾", name: "Syria" },
+  { code: "GB", dial: "+44", flag: "🇬🇧", name: "UK" },
+  { code: "US", dial: "+1", flag: "🇺🇸", name: "USA" },
+  { code: "FR", dial: "+33", flag: "🇫🇷", name: "France" },
+  { code: "DE", dial: "+49", flag: "🇩🇪", name: "Germany" },
+  { code: "IN", dial: "+91", flag: "🇮🇳", name: "India" },
+  { code: "PK", dial: "+92", flag: "🇵🇰", name: "Pakistan" },
+  { code: "PH", dial: "+63", flag: "🇵🇭", name: "Philippines" },
+  { code: "NG", dial: "+234", flag: "🇳🇬", name: "Nigeria" },
+  { code: "ZA", dial: "+27", flag: "🇿🇦", name: "South Africa" },
+  { code: "TR", dial: "+90", flag: "🇹🇷", name: "Turkey" },
+  { code: "IR", dial: "+98", flag: "🇮🇷", name: "Iran" },
+];

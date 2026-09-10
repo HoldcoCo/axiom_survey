@@ -1,0 +1,10 @@
+{
+  "description": "Holdco Digital Health Check — free 60-second digital maturity assessment for businesses.",
+  "robots": {
+    "index": true
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
