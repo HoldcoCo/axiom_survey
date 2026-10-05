@@ -425,15 +425,24 @@ export default function RevealScreen({
         >
           <LogoPair height={32} />
         </div>
-        {/* Wide content */}
+        <div
+          style={{
+            flex: 1,
+            minHeight: 0,
+            display: "flex",
+            alignItems: "safe center",
+            justifyContent: "center",
+            overflowY: "auto",
+          }}
+        >
         <div
           style={{
             ...innerWide,
-            padding: "52px 40px 64px",
+            padding: "24px 40px",
             display: "grid",
             gridTemplateColumns: "1fr 1fr",
             gap: 48,
-            alignItems: "start",
+            alignItems: "center",
           }}
         >
           {/* Left: gauge + badge */}
@@ -504,6 +513,7 @@ export default function RevealScreen({
             {ctaPanel}
           </div>
         </div>
+        </div>
       </div>
     );
   }
@@ -568,11 +578,22 @@ export default function RevealScreen({
 
       <div
         style={{
+          flex: 1,
+          minHeight: 0,
+          width: "100%",
+          display: "flex",
+          alignItems: "safe center",
+          justifyContent: "center",
+          overflowY: "auto",
+        }}
+      >
+      <div
+        style={{
           ...inner,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          padding: "32px 22px 50px",
+          padding: "16px 22px 24px",
         }}
       >
         <h1
@@ -634,6 +655,7 @@ export default function RevealScreen({
         </div>
 
         {ctaPanel}
+      </div>
       </div>
     </div>
   );
