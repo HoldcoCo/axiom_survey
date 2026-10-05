@@ -3,14 +3,14 @@
  * Kept as constants so screens can stay on inline styles without drift.
  */
 
-export const NAVY = "#1B2C4B";
-export const TEAL = "#0D9488";
-export const PAGE = "#F5F3EF";
+export const NAVY = "#08213D";
+export const TEAL = "#0057A8";
+export const PAGE = "#F4F8FC";
 export const CARD = "#FFFFFF";
-export const BORDER = "#E4E9F0";
-export const T1 = "#1B2C4B";
-export const T2 = "#64748B";
-export const T3 = "#9AABBD";
+export const BORDER = "#D9E5EF";
+export const T1 = "#071C33";
+export const T2 = "#52677D";
+export const T3 = "#8294A7";
 
 export const FONT_AR = "'Cairo', sans-serif";
 export const FONT_EN = "'Inter', sans-serif";

@@ -69,7 +69,7 @@ export default function FormScreen({
   const isTablet = useIsTablet();
 
   const formFields = (
-    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: isTablet ? 16 : 9 }}>
       {ui.formFields.map(({ field, label, placeholder, type, ltr }) => {
         if (field === "whatsapp") {
           return (
@@ -414,7 +414,7 @@ export default function FormScreen({
                 color: TEAL,
                 fontWeight: 700,
                 marginBottom: 20,
-                background: "rgba(13,148,136,0.15)",
+                background: "rgba(0,87,168,0.15)",
                 padding: "5px 14px",
                 borderRadius: 999,
                 width: "fit-content",
@@ -561,7 +561,7 @@ export default function FormScreen({
           ...inner,
           flex: 1,
           overflowY: "auto",
-          padding: "26px 20px 130px",
+          padding: "14px 16px 94px",
         }}
         className="scrollbar-hide"
       >

@@ -7,6 +7,7 @@ body,
   height: 100%;
   margin: 0;
   padding: 0;
+  overflow: hidden;
 }
 
 *,
@@ -90,7 +91,7 @@ body,
 .count-glow { animation: count-up-glow 0.5s ease-in-out; }
 
 .shimmer-btn {
-  background: linear-gradient(90deg, #1B2C4B 0%, #2d4a7a 40%, #1B2C4B 60%, #1B2C4B 100%);
+  background: linear-gradient(90deg, #08213D 0%, #1a4a7a 40%, #08213D 60%, #08213D 100%);
   background-size: 200% auto;
   animation: shimmer 2s linear infinite;
 }
@@ -115,7 +116,51 @@ body,
 
 body {
   font-family: 'Cairo', 'Inter', sans-serif;
-  background: #F5F3EF;
+  background: #F4F8FC;
+  overscroll-behavior-y: none;
+}
+
+#root {
+  height: 100dvh;
+  max-height: 100dvh;
+}
+
+button:not(:disabled),
+a {
+  transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
+}
+
+button:not(:disabled):hover,
+a:hover {
+  filter: brightness(1.04);
+}
+
+button:not(:disabled):active,
+a:active {
+  transform: translateY(1px);
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 3px solid rgba(0, 87, 168, 0.28);
+  outline-offset: 2px;
+}
+
+@media (max-height: 780px) and (max-width: 767px) {
+  .giveaway-card {
+    margin-bottom: 14px !important;
+  }
+
+  .score-social {
+    display: none;
+  }
+}
+
+@media (max-height: 680px) and (max-width: 767px) {
+  .score-page .pop-in {
+    transform: scale(0.9);
+  }
 }
 
 /* Respect OS reduced-motion preference for all funnel animations */

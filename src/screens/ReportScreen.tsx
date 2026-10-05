@@ -6,7 +6,7 @@ import { UI } from "@/i18n";
 import { getBookingUrl } from "@/lib/bookingUrl";
 import { getLevel } from "@/lib/scoring";
 import { inner, innerWide, ws } from "@/theme/styles";
-import { BORDER, T1, T2, T3 } from "@/theme/tokens";
+import { BORDER, CARD, PAGE, T1, T2, T3, TEAL } from "@/theme/tokens";
 import { hexRgba } from "@/theme/utils";
 import type { AnswerMap, Lang, LeadFormData } from "@/types";
 
@@ -340,6 +340,166 @@ export default function ReportScreen({
       style={{ ...ws(lang), overflowY: "auto", background: "#F0F4FA" }}
       className="scrollbar-hide"
     >
+      <div style={{ background: CARD, borderBottom: `1px solid ${BORDER}` }}>
+        <div
+          style={{
+            ...container,
+            padding: isTablet ? "18px 40px 22px" : "14px 16px 18px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 16,
+              marginBottom: isTablet ? 20 : 16,
+            }}
+          >
+            <button
+              type="button"
+              onClick={onBack}
+              style={{
+                background: PAGE,
+                border: `1px solid ${BORDER}`,
+                borderRadius: 10,
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+                color: T1,
+                fontSize: 13,
+                fontWeight: 700,
+                fontFamily: ff,
+                padding: "9px 14px",
+              }}
+            >
+              <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
+                <path
+                  d={isAr ? "M7 4.5L12 9L7 13.5" : "M11 4.5L6 9L11 13.5"}
+                  stroke={T1}
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              {isAr ? "رجوع" : "Back"}
+            </button>
+            <LogoPair height={isTablet ? 28 : 24} />
+          </div>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: isTablet ? "1fr auto" : "1fr",
+              gap: isTablet ? 28 : 14,
+              alignItems: "center",
+              border: `1px solid ${BORDER}`,
+              borderRadius: 16,
+              padding: isTablet ? "20px 24px" : "16px",
+              background: "#F8FBFE",
+            }}
+          >
+            <div>
+              <div
+                style={{
+                  fontSize: 11,
+                  color: TEAL,
+                  letterSpacing: 1.1,
+                  textTransform: "uppercase",
+                  fontWeight: 800,
+                  marginBottom: 7,
+                  fontFamily: ff,
+                }}
+              >
+                {isAr ? "ملخص التقرير" : "Report Summary"}
+              </div>
+              <h1
+                style={{
+                  fontSize: isTablet ? 24 : 20,
+                  color: T1,
+                  fontWeight: 850,
+                  marginBottom: 9,
+                  fontFamily: ff,
+                }}
+              >
+                {formData.name || (isAr ? "المشارك" : "Participant")}
+              </h1>
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: "6px 16px",
+                  color: T2,
+                  fontSize: 12,
+                  fontFamily: ff,
+                }}
+              >
+                {formData.company ? <span>{formData.company}</span> : null}
+                {formData.email ? <span dir="ltr">{formData.email}</span> : null}
+                {formData.phone ? <span dir="ltr">{formData.phone}</span> : null}
+              </div>
+            </div>
+            <div
+              style={{
+                minWidth: isTablet ? 180 : 0,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: isTablet ? "flex-end" : "space-between",
+                gap: 14,
+                borderInlineStart: isTablet ? `1px solid ${BORDER}` : "none",
+                paddingInlineStart: isTablet ? 28 : 0,
+              }}
+            >
+              <div>
+                <div
+                  style={{
+                    fontSize: 11,
+                    color: T3,
+                    fontWeight: 700,
+                    marginBottom: 3,
+                    fontFamily: ff,
+                  }}
+                >
+                  {isAr ? "درجة النضوج الرقمي" : "Digital Maturity Score"}
+                </div>
+                <div
+                  style={{
+                    fontSize: 12,
+                    color: TEAL,
+                    fontWeight: 750,
+                    fontFamily: ff,
+                  }}
+                >
+                  {level.label}
+                </div>
+              </div>
+              <div
+                style={{
+                  fontSize: isTablet ? 44 : 36,
+                  lineHeight: 1,
+                  color: T1,
+                  fontWeight: 900,
+                  letterSpacing: -2,
+                  fontFamily: ff,
+                }}
+              >
+                {score}
+                <span
+                  style={{
+                    fontSize: 14,
+                    color: T3,
+                    fontWeight: 600,
+                    letterSpacing: 0,
+                  }}
+                >
+                  /100
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* ── VIVID HERO BANNER ─────────────────────────────────────────────────── */}
       <div
         style={{
@@ -391,49 +551,9 @@ export default function ReportScreen({
             ...container,
             position: "relative",
             zIndex: 1,
-            padding: isTablet ? "32px 48px 52px" : "24px 20px 44px",
+            padding: isTablet ? "46px 48px 52px" : "36px 20px 44px",
           }}
         >
-          {/* Nav */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              marginBottom: isTablet ? 44 : 30,
-            }}
-          >
-            <button
-              onClick={onBack}
-              style={{
-                background: "rgba(255,255,255,0.15)",
-                border: "1px solid rgba(255,255,255,0.2)",
-                borderRadius: 12,
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                gap: 6,
-                color: "white",
-                fontSize: 13,
-                fontWeight: 600,
-                fontFamily: ff,
-                padding: "9px 16px",
-              }}
-            >
-              <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
-                <path
-                  d={isAr ? "M7 4.5L12 9L7 13.5" : "M11 4.5L6 9L11 13.5"}
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              {isAr ? "رجوع" : "Back"}
-            </button>
-            <LogoPair height={26} invert />
-          </div>
-
           {/* Score + identity */}
           <div
             style={{

@@ -45,5 +45,6 @@ export const ICON_COLORS: Record<string, { bg: string; stroke: string }> = {
   mail: { bg: "#EFF6FF", stroke: "#2563EB" },
   star: { bg: "#FEFCE8", stroke: "#CA8A04" },
   file: { bg: "#EFF6FF", stroke: "#2563EB" },
+  document: { bg: "#EFF6FF", stroke: "#2563EB" },
   help: { bg: "#F5F3FF", stroke: "#7C3AED" },
 };

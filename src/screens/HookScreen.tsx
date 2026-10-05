@@ -1,40 +1,18 @@
 import React from "react";
-import axiomLogo from "@/assets/Axiom_erp_.png";
-import holdcoLogo from "@/assets/Holdco_corp_logo.png";
 import IconShape from "@/components/icons/IconShape";
+import LogoPair from "@/components/layout/LogoPair";
 import TopBanner from "@/components/layout/TopBanner";
 import { useIsTablet } from "@/hooks/useIsTablet";
 import { inner } from "@/theme/styles";
-import { BORDER, CARD, NAVY, PAGE, T1, T2, T3, TEAL } from "@/theme/tokens";
+import { BORDER, CARD, PAGE, T1, T2, T3, TEAL } from "@/theme/tokens";
 
 export default function HookScreen({ onNext }: { onNext: () => void }) {
   const isTablet = useIsTablet();
 
   const statCards = [
-    {
-      icon: "zap",
-      val: "60s",
-      lbl: "To complete",
-      delay: "0s",
-      color: "#FFF7ED",
-      border: "#FED7AA",
-    },
-    {
-      icon: "target",
-      val: "100",
-      lbl: "Point scale",
-      delay: "0.08s",
-      color: "#EEF9F8",
-      border: "#B2EAE5",
-    },
-    {
-      icon: "gift",
-      val: "Free",
-      lbl: "No signup",
-      delay: "0.16s",
-      color: "#EEF2FF",
-      border: "#C7D2FE",
-    },
+    { icon: "zap", val: "60s", lbl: "To complete" },
+    { icon: "target", val: "100", lbl: "Point scale" },
+    { icon: "gift", val: "Free", lbl: "No signup" },
   ];
 
   if (isTablet) {
@@ -42,127 +20,62 @@ export default function HookScreen({ onNext }: { onNext: () => void }) {
       <div
         style={{
           backgroundColor: PAGE,
-          minHeight: "100vh",
+          height: "100dvh",
+          minHeight: 0,
           display: "flex",
           flexDirection: "column",
           fontFamily: "'Inter', sans-serif",
           overflow: "hidden",
         }}
       >
-        {/* Top bar — Holdco only */}
         <div
           style={{
             background: CARD,
             borderBottom: `1px solid ${BORDER}`,
-            padding: "18px 48px",
+            padding: "16px 48px",
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
+            justifyContent: "flex-start",
           }}
         >
-          <img
-            src={holdcoLogo}
-            alt="Holdco Corp"
-            style={{ height: 32, width: "auto", objectFit: "contain" }}
-          />
+          <LogoPair height={32} />
         </div>
 
-        {/* Split layout */}
         <div style={{ flex: 1, display: "flex", overflow: "hidden" }}>
-          {/* Left — dark hero panel */}
           <div
             style={{
-              width: "48%",
-              background: NAVY,
-              padding: "72px 64px",
+              width: "52%",
+              background: "#EEF5FC",
+              padding: "56px 64px",
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
               position: "relative",
               overflow: "hidden",
+              borderRight: `1px solid ${BORDER}`,
             }}
           >
-            <div
-              style={{
-                position: "absolute",
-                bottom: -100,
-                right: -100,
-                width: 340,
-                height: 340,
-                borderRadius: "50%",
-                border: "50px solid rgba(255,255,255,0.03)",
-                pointerEvents: "none",
-              }}
-            />
-            <div
-              style={{
-                position: "absolute",
-                top: -50,
-                left: -50,
-                width: 200,
-                height: 200,
-                borderRadius: "50%",
-                border: "36px solid rgba(13,148,136,0.08)",
-                pointerEvents: "none",
-              }}
-            />
-
-            {/* Axiom logo — prominent above badge */}
-            <div className="fade-up" style={{ marginBottom: 28 }}>
-              <img
-                src={axiomLogo}
-                alt="Axiom ERP"
-                style={{
-                  height: 52,
-                  width: "auto",
-                  objectFit: "contain",
-                  filter: "brightness(0) invert(1)",
-                }}
-              />
-            </div>
             <div
               className="fade-up"
               style={{
                 display: "inline-flex",
                 alignItems: "center",
-                gap: 8,
-                padding: "7px 16px",
+                padding: "6px 14px",
                 borderRadius: 999,
-                background: "rgba(13,148,136,0.15)",
-                border: "1px solid rgba(13,148,136,0.3)",
-                marginBottom: 32,
+                background: "#DDECF9",
+                marginBottom: 28,
                 width: "fit-content",
               }}
             >
-              <span style={{ position: "relative", display: "inline-flex" }}>
-                <span
-                  style={{
-                    width: 8,
-                    height: 8,
-                    borderRadius: "50%",
-                    background: TEAL,
-                    display: "block",
-                  }}
-                />
-                <span
-                  style={{
-                    position: "absolute",
-                    inset: -2,
-                    borderRadius: "50%",
-                    border: `2px solid ${TEAL}`,
-                    animation: "pulse-ring 1.5s ease-out infinite",
-                  }}
-                />
-              </span>
               <span
                 style={{
-                  fontSize: 13,
-                  fontWeight: 700,
+                  fontSize: 12,
+                  fontWeight: 750,
                   color: TEAL,
-                  letterSpacing: 0.5,
+                  letterSpacing: 0.4,
                 }}
               >
-                60-Second Assessment
+                DIGITAL HEALTH CHECK · 60 SECONDS
               </span>
             </div>
 
@@ -170,11 +83,12 @@ export default function HookScreen({ onNext }: { onNext: () => void }) {
               className="fade-up"
               style={{
                 fontSize: 48,
-                fontWeight: 800,
-                color: "white",
+                fontWeight: 750,
+                color: T1,
                 lineHeight: 1.15,
-                letterSpacing: -1,
-                marginBottom: 24,
+                letterSpacing: -1.2,
+                marginBottom: 22,
+                maxWidth: 620,
               }}
             >
               Curious how digitally mature your business{" "}
@@ -184,20 +98,19 @@ export default function HookScreen({ onNext }: { onNext: () => void }) {
             <p
               className="fade-up"
               style={{
-                fontSize: 18,
-                color: "rgba(255,255,255,0.6)",
-                lineHeight: 1.8,
-                marginBottom: 48,
+                fontSize: 17,
+                color: T2,
+                lineHeight: 1.75,
+                marginBottom: 38,
+                maxWidth: 580,
               }}
             >
               Take our{" "}
-              <strong style={{ color: TEAL, fontWeight: 900 }}>
+              <strong style={{ color: TEAL, fontWeight: 750 }}>
                 60-second
               </strong>{" "}
               Digital Health Check and get an instant score, plus a{" "}
-              <strong
-                style={{ color: "rgba(255,255,255,0.9)", fontWeight: 700 }}
-              >
+              <strong style={{ color: T1, fontWeight: 700 }}>
                 free personalized tip
               </strong>{" "}
               on what to fix first.
@@ -205,18 +118,19 @@ export default function HookScreen({ onNext }: { onNext: () => void }) {
 
             <div className="fade-up-delay">
               <button
+                type="button"
                 onClick={onNext}
-                className="shimmer-btn"
                 style={{
-                  padding: "20px 48px",
-                  borderRadius: 16,
+                  padding: "17px 34px",
+                  borderRadius: 10,
+                  background: TEAL,
                   color: "white",
                   fontWeight: 700,
-                  fontSize: 18,
+                  fontSize: 16,
                   border: "none",
                   cursor: "pointer",
                   fontFamily: "'Inter', sans-serif",
-                  boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
+                  boxShadow: "0 8px 22px rgba(0,87,168,0.2)",
                   display: "inline-flex",
                   alignItems: "center",
                   gap: 10,
@@ -225,31 +139,24 @@ export default function HookScreen({ onNext }: { onNext: () => void }) {
                 Take the Free Assessment
                 <span style={{ fontSize: 22 }}>→</span>
               </button>
-              <p
-                style={{
-                  fontSize: 13,
-                  color: "rgba(255,255,255,0.35)",
-                  marginTop: 16,
-                }}
-              >
+              <p style={{ fontSize: 12, color: T3, marginTop: 14 }}>
                 Free · No commitment · 60 seconds
               </p>
             </div>
           </div>
 
-          {/* Right — stat panel */}
           <div
             style={{
               flex: 1,
-              background: PAGE,
-              padding: "72px 64px",
+              background: CARD,
+              padding: "48px 54px",
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
             }}
           >
-            <div style={{ marginBottom: 48, textAlign: "center" }}>
+            <div style={{ marginBottom: 26, textAlign: "center" }}>
               <p
                 style={{
                   fontSize: 13,
@@ -265,7 +172,7 @@ export default function HookScreen({ onNext }: { onNext: () => void }) {
               <div
                 style={{
                   width: 32,
-                  height: 3,
+                  height: 2,
                   background: TEAL,
                   borderRadius: 999,
                   margin: "0 auto",
@@ -281,6 +188,7 @@ export default function HookScreen({ onNext }: { onNext: () => void }) {
                 maxWidth: 480,
               }}
             >
+              <GiveawayCard compact={false} />
               <div
                 style={{
                   display: "grid",
@@ -291,14 +199,12 @@ export default function HookScreen({ onNext }: { onNext: () => void }) {
                 {statCards.map((s) => (
                   <div
                     key={s.val}
-                    className="float"
                     style={{
-                      background: s.color,
-                      border: `1px solid ${s.border}`,
-                      borderRadius: 22,
-                      padding: "28px 16px",
+                      background: CARD,
+                      border: `1px solid ${BORDER}`,
+                      borderRadius: 12,
+                      padding: "18px 12px",
                       textAlign: "center",
-                      animationDelay: s.delay,
                     }}
                   >
                     <div
@@ -308,7 +214,7 @@ export default function HookScreen({ onNext }: { onNext: () => void }) {
                         marginBottom: 10,
                       }}
                     >
-                      <IconShape name={s.icon} size={48} />
+                      <IconShape name={s.icon} size={40} />
                     </div>
                     <div
                       style={{
@@ -326,40 +232,6 @@ export default function HookScreen({ onNext }: { onNext: () => void }) {
                   </div>
                 ))}
               </div>
-              <div
-                className="float"
-                style={{
-                  background: CARD,
-                  border: `1px solid ${BORDER}`,
-                  borderRadius: 22,
-                  padding: "28px 20px",
-                  textAlign: "center",
-                  animationDelay: "0.24s",
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    marginBottom: 10,
-                  }}
-                >
-                  <IconShape name="barchart" size={48} />
-                </div>
-                <div
-                  style={{
-                    fontWeight: 800,
-                    fontSize: 22,
-                    color: T1,
-                    marginBottom: 4,
-                  }}
-                >
-                  Score + Tips
-                </div>
-                <div style={{ fontSize: 12, color: T3, fontWeight: 500 }}>
-                  Instant personalized report
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -371,7 +243,8 @@ export default function HookScreen({ onNext }: { onNext: () => void }) {
     <div
       style={{
         backgroundColor: PAGE,
-        minHeight: "100vh",
+        height: "100dvh",
+        minHeight: 0,
         display: "flex",
         flexDirection: "column",
         fontFamily: "'Inter', sans-serif",
@@ -380,41 +253,14 @@ export default function HookScreen({ onNext }: { onNext: () => void }) {
     >
       <TopBanner subtitle="Digital Health Check" />
 
-      {/* Decorative floating blobs */}
-      <div
-        style={{
-          position: "absolute",
-          top: 90,
-          right: -40,
-          width: 180,
-          height: 180,
-          borderRadius: "50%",
-          background:
-            "radial-gradient(circle, rgba(13,148,136,0.08) 0%, transparent 70%)",
-          pointerEvents: "none",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          top: 200,
-          left: -60,
-          width: 220,
-          height: 220,
-          borderRadius: "50%",
-          background:
-            "radial-gradient(circle, rgba(27,44,75,0.06) 0%, transparent 70%)",
-          pointerEvents: "none",
-        }}
-      />
-
       <div
         style={{
           ...inner,
           flex: 1,
+          minHeight: 0,
           display: "flex",
           flexDirection: "column",
-          padding: "32px 28px 40px",
+          padding: "22px 22px 24px",
           position: "relative",
           zIndex: 1,
         }}
@@ -423,74 +269,42 @@ export default function HookScreen({ onNext }: { onNext: () => void }) {
           className="fade-up"
           style={{
             flex: 1,
+            minHeight: 0,
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
-            paddingBottom: 24,
           }}
         >
-          {/* Axiom logo — big, above badge */}
-          <div style={{ marginBottom: 20 }}>
-            <img
-              src={axiomLogo}
-              alt="Axiom ERP"
-              style={{ height: 46, width: "auto", objectFit: "contain" }}
-            />
-          </div>
           <div
             style={{
               display: "inline-flex",
               alignItems: "center",
-              gap: 8,
-              padding: "6px 14px",
+              padding: "5px 12px",
               borderRadius: 999,
-              background: "#EEF9F8",
-              border: "1px solid #B2EAE5",
-              marginBottom: 26,
+              background: "#DDECF9",
+              marginBottom: 16,
               width: "fit-content",
-              position: "relative",
             }}
           >
-            <span style={{ position: "relative", display: "inline-flex" }}>
-              <span
-                style={{
-                  width: 8,
-                  height: 8,
-                  borderRadius: "50%",
-                  background: TEAL,
-                  display: "block",
-                }}
-              />
-              <span
-                className="pulse-ring"
-                style={{
-                  position: "absolute",
-                  inset: -2,
-                  borderRadius: "50%",
-                  border: `2px solid ${TEAL}`,
-                  animation: "pulse-ring 1.5s ease-out infinite",
-                }}
-              />
-            </span>
             <span
               style={{
-                fontSize: 12,
-                fontWeight: 700,
+                fontSize: 11,
+                fontWeight: 750,
                 color: TEAL,
-                letterSpacing: 0.5,
+                letterSpacing: 0.4,
               }}
             >
-              60-Second Assessment
+              DIGITAL HEALTH CHECK · 60 SECONDS
             </span>
           </div>
           <h1
             style={{
-              fontSize: 31,
-              fontWeight: 800,
+              fontSize: 29,
+              fontWeight: 750,
               color: T1,
-              lineHeight: 1.25,
-              letterSpacing: -0.5,
-              marginBottom: 20,
+              lineHeight: 1.22,
+              letterSpacing: -0.6,
+              marginBottom: 12,
             }}
           >
             Curious how digitally mature your business{" "}
@@ -498,10 +312,10 @@ export default function HookScreen({ onNext }: { onNext: () => void }) {
           </h1>
           <p
             style={{
-              fontSize: 16,
+              fontSize: 14,
               color: T2,
-              lineHeight: 1.85,
-              marginBottom: 32,
+              lineHeight: 1.65,
+              marginBottom: 16,
             }}
           >
             Take our{" "}
@@ -516,6 +330,7 @@ export default function HookScreen({ onNext }: { onNext: () => void }) {
             </strong>{" "}
             on what to fix first.
           </p>
+          <GiveawayCard compact />
           <div
             style={{
               display: "grid",
@@ -527,24 +342,22 @@ export default function HookScreen({ onNext }: { onNext: () => void }) {
             {statCards.map((s) => (
               <div
                 key={s.val}
-                className="float"
                 style={{
-                  background: s.color,
-                  border: `1px solid ${s.border}`,
-                  borderRadius: 18,
-                  padding: "14px 10px",
+                  background: CARD,
+                  border: `1px solid ${BORDER}`,
+                  borderRadius: 10,
+                  padding: "9px 8px",
                   textAlign: "center",
-                  animationDelay: s.delay,
                 }}
               >
                 <div
                   style={{
                     display: "flex",
                     justifyContent: "center",
-                    marginBottom: 6,
+                    marginBottom: 4,
                   }}
                 >
-                  <IconShape name={s.icon} size={36} />
+                  <IconShape name={s.icon} size={28} />
                 </div>
                 <div style={{ fontWeight: 800, fontSize: 15, color: T1 }}>
                   {s.val}
@@ -563,21 +376,22 @@ export default function HookScreen({ onNext }: { onNext: () => void }) {
             ))}
           </div>
         </div>
-        <div className="fade-up-delay">
+        <div className="fade-up-delay" style={{ paddingTop: 14 }}>
           <button
+            type="button"
             onClick={onNext}
-            className="shimmer-btn"
             style={{
               width: "100%",
-              padding: "18px",
-              borderRadius: 16,
+              padding: "15px",
+              borderRadius: 10,
+              background: TEAL,
               color: "white",
               fontWeight: 700,
-              fontSize: 17,
+              fontSize: 16,
               border: "none",
               cursor: "pointer",
               fontFamily: "'Inter', sans-serif",
-              boxShadow: "0 8px 28px rgba(27,44,75,0.32)",
+              boxShadow: "0 7px 20px rgba(0,87,168,0.2)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -603,4 +417,111 @@ export default function HookScreen({ onNext }: { onNext: () => void }) {
   );
 }
 
-// ── Language Screen ───────────────────────────────────────────────────────────
+function GiveawayCard({ compact }: { compact: boolean }) {
+  return (
+    <div
+      className="fade-up giveaway-card"
+      style={{
+        background: CARD,
+        border: `1.5px solid ${TEAL}`,
+        borderRadius: compact ? 14 : 16,
+        padding: compact ? "15px" : "26px 28px",
+        marginBottom: compact ? 14 : 0,
+        boxShadow: compact
+          ? "0 6px 20px rgba(0,87,168,0.07)"
+          : "0 8px 28px rgba(0,87,168,0.08)",
+        textAlign: "left",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      {!compact && (
+        <div
+          style={{
+            position: "absolute",
+            top: -44,
+            right: -44,
+            width: 132,
+            height: 132,
+            borderRadius: "50%",
+            background:
+              "linear-gradient(135deg, rgba(0,87,168,0.14), rgba(8,33,61,0.06))",
+          }}
+        />
+      )}
+      <span
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 7,
+          padding: compact ? 0 : "6px 12px",
+          borderRadius: 999,
+          background: compact ? "transparent" : "#EFF6FF",
+          color: "#2563EB",
+          fontSize: compact ? 10 : 12,
+          fontWeight: 800,
+          letterSpacing: compact ? 0.8 : 0.5,
+          marginBottom: compact ? 7 : 16,
+        }}
+      >
+        <IconShape name="gift" size={compact ? 16 : 20} />
+        GIVEAWAY
+      </span>
+      <h2
+        style={{
+          fontSize: compact ? 18 : 24,
+          lineHeight: compact ? 1.3 : 1.25,
+          fontWeight: 850,
+          color: T1,
+          marginBottom: compact ? 7 : 10,
+          position: "relative",
+        }}
+      >
+        Complete the survey for a chance to win!
+      </h2>
+      <p
+        style={{
+          fontSize: compact ? 12 : 14,
+          lineHeight: compact ? 1.6 : 1.7,
+          color: T2,
+          marginBottom: compact ? 12 : 18,
+          position: "relative",
+        }}
+      >
+        {compact
+          ? "You’ll automatically enter the draw when you complete the survey."
+          : "Complete the assessment and you’ll automatically enter the draw."}
+      </p>
+      <div
+        style={{
+          borderRadius: compact ? 9 : 10,
+          padding: compact ? "11px 13px" : "17px 19px",
+          background: "#EEF5FC",
+          border: `1px solid ${BORDER}`,
+          color: T1,
+          position: "relative",
+        }}
+      >
+        <div
+          style={{
+            fontSize: compact ? 19 : 28,
+            fontWeight: 900,
+            lineHeight: compact ? 1.1 : 1.05,
+          }}
+        >
+          1 of 3 prizes
+        </div>
+        <div
+          style={{
+            fontSize: compact ? 11 : 14,
+            fontWeight: 650,
+            marginTop: compact ? 5 : 7,
+            color: TEAL,
+          }}
+        >
+          A full year of Axiom Express, completely free
+        </div>
+      </div>
+    </div>
+  );
+}

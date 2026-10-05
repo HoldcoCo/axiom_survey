@@ -9,7 +9,9 @@ import { FONT_AR, FONT_EN, PAGE } from "./tokens";
 export function ws(lang: Lang): CSSProperties {
   return {
     backgroundColor: PAGE,
-    minHeight: "100vh",
+    height: "100dvh",
+    minHeight: 0,
+    overflow: "hidden",
     fontFamily: lang === "ar" ? FONT_AR : FONT_EN,
     direction: lang === "ar" ? "rtl" : "ltr",
     display: "flex",

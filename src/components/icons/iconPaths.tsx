@@ -324,6 +324,12 @@ export const ICON_PATHS: Record<string, React.ReactElement> = {
       <polyline points="10 9 9 9 8 9" />
     </>
   ),
+  document: (
+    <>
+      <path d="M6 2h9l4 4v16H6z" />
+      <path d="M14 2v5h5M9 12h6M9 16h6" />
+    </>
+  ),
   help: (
     <>
       <circle cx="12" cy="12" r="10" />

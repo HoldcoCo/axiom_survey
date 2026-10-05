@@ -192,7 +192,7 @@ export default function RevealScreen({
           gap: 6,
         }}
       >
-        <IconShape name="file" size={22} />
+        <IconShape name="document" size={24} />
         {ui.viewReport} {ui.arrow}
       </button>
       {emailStatus === "sent" && email.length > 0 && (
@@ -259,6 +259,75 @@ export default function RevealScreen({
           {ui.resend}
         </button>
       )}
+      <div
+        className="score-social"
+        style={{
+          padding: isTablet ? "16px 20px" : "13px 14px",
+          borderRadius: 14,
+          background: "#EFF6FF",
+          border: "1px solid #BFDBFE",
+          textAlign: "center",
+        }}
+      >
+        <div
+          style={{
+            fontSize: isTablet ? 17 : 15,
+            color: T1,
+            fontWeight: 850,
+            marginBottom: 4,
+            fontFamily: ff,
+          }}
+        >
+          {lang === "ar" ? "هل تريد فرصاً أكثر للفوز؟" : "Want more chances to win?"}
+        </div>
+        <p
+          style={{
+            fontSize: 11,
+            color: T2,
+            marginBottom: 10,
+            fontFamily: ff,
+          }}
+        >
+          {lang === "ar" ? "تابعنا على إنستغرام" : "Follow us on Instagram"}
+        </p>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 9 }}>
+          <a
+            href="https://www.instagram.com/axiom_erp/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              padding: "11px 9px",
+              borderRadius: 12,
+              background: "#2563EB",
+              color: "white",
+              fontSize: 12,
+              fontWeight: 750,
+              textDecoration: "none",
+              fontFamily: ff,
+            }}
+          >
+            {lang === "ar" ? "تابع Axiom ERP" : "Follow Axiom ERP"}
+          </a>
+          <a
+            href="https://www.instagram.com/holdcocorp/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              padding: "11px 9px",
+              borderRadius: 12,
+              background: CARD,
+              border: "1px solid #93C5FD",
+              color: "#1D4ED8",
+              fontSize: 12,
+              fontWeight: 750,
+              textDecoration: "none",
+              fontFamily: ff,
+            }}
+          >
+            {lang === "ar" ? "تابع HoldCo" : "Follow HoldCo"}
+          </a>
+        </div>
+      </div>
       <button
         type="button"
         onClick={onRetake}
@@ -495,8 +564,8 @@ export default function RevealScreen({
 
   return (
     <div
+      className="score-page scrollbar-hide"
       style={{ ...ws(lang), overflowY: "auto", position: "relative" }}
-      className="scrollbar-hide"
     >
       {/* Confetti burst */}
       <div

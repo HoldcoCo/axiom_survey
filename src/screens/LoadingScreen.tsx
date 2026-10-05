@@ -71,7 +71,7 @@ export default function LoadingScreen({ lang }: { lang: Lang }) {
               cy={ringSize / 2}
               r={r}
               fill="none"
-              stroke="#E4E9F0"
+              stroke={BORDER}
               strokeWidth={isTablet ? 12 : 8}
             />
             <circle

@@ -2,6 +2,7 @@ import React from "react";
 import type { Lang, Option } from "@/types";
 import { BORDER, CARD, T1, TEAL } from "@/theme/tokens";
 import IconShape from "@/components/icons/IconShape";
+import { useIsTablet } from "@/hooks/useIsTablet";
 
 export default function OptionCard({
   opt,
@@ -17,8 +18,9 @@ export default function OptionCard({
   onClick: () => void;
 }) {
   const selColor = opt.isNone ? "#16A34A" : TEAL;
-  const selBg = opt.isNone ? "#F0FFF4" : "#EEF9F8";
-  const selBorder = opt.isNone ? "#86EFAC" : "#5EEAD4";
+  const selBg = opt.isNone ? "#F0FFF4" : "#EEF5FC";
+  const selBorder = opt.isNone ? "#86EFAC" : "#93C5FD";
+  const isTablet = useIsTablet();
   return (
     <button
       type="button"
@@ -29,9 +31,9 @@ export default function OptionCard({
         width: "100%",
         display: "flex",
         alignItems: "center",
-        gap: 14,
-        padding: "14px 16px",
-        borderRadius: 18,
+        gap: isTablet ? 12 : 10,
+        padding: isTablet ? "8px 14px" : "7px 11px",
+        borderRadius: isTablet ? 14 : 10,
         background: selected ? selBg : CARD,
         border: `2px solid ${selected ? selBorder : BORDER}`,
         boxShadow: selected
@@ -54,7 +56,7 @@ export default function OptionCard({
           flexShrink: 0,
         }}
       >
-        <IconShape name={opt.emoji} size={48} />
+        <IconShape name={opt.emoji} size={isTablet ? 40 : 32} />
       </div>
 
       <span
@@ -62,7 +64,7 @@ export default function OptionCard({
           flex: 1,
           fontWeight: selected ? 700 : 500,
           fontSize: 14,
-          color: selected ? "#0F766E" : T1,
+          color: selected ? TEAL : T1,
           lineHeight: 1.45,
         }}
       >
@@ -73,9 +75,9 @@ export default function OptionCard({
       {isMulti ? (
         <div
           style={{
-            width: 24,
-            height: 24,
-            borderRadius: 7,
+            width: isTablet ? 24 : 20,
+            height: isTablet ? 24 : 20,
+            borderRadius: 6,
             flexShrink: 0,
             background: selected ? selColor : "transparent",
             border: `2px solid ${selected ? selColor : "#D1D9E6"}`,
@@ -107,8 +109,8 @@ export default function OptionCard({
       ) : (
         <div
           style={{
-            width: 24,
-            height: 24,
+            width: isTablet ? 24 : 20,
+            height: isTablet ? 24 : 20,
             borderRadius: "50%",
             flexShrink: 0,
             background: "transparent",
@@ -124,8 +126,8 @@ export default function OptionCard({
             <div
               className="bounce-in"
               style={{
-                width: 12,
-                height: 12,
+                width: isTablet ? 12 : 10,
+                height: isTablet ? 12 : 10,
                 borderRadius: "50%",
                 background: selColor,
               }}

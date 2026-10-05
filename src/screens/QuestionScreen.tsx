@@ -61,7 +61,7 @@ export default function QuestionScreen({
       style={{
         display: "flex",
         flexDirection: "column",
-        gap: isTablet ? 12 : 10,
+        gap: isTablet ? 8 : 6,
       }}
     >
       {question.options.map((opt, i) => (
@@ -110,15 +110,16 @@ export default function QuestionScreen({
             background: CARD,
             borderBottom: `1px solid ${BORDER}`,
             padding: "16px 40px",
-            display: "flex",
+            display: "grid",
+            gridTemplateColumns: "1fr auto 1fr",
             alignItems: "center",
-            justifyContent: "space-between",
             flexShrink: 0,
           }}
         >
           <button
             onClick={onBack}
             style={{
+              justifySelf: "start",
               background: "none",
               border: `1.5px solid ${BORDER}`,
               borderRadius: 12,
@@ -145,35 +146,7 @@ export default function QuestionScreen({
             {isAr ? "\u0631\u062c\u0648\u0639" : "Back"}
           </button>
           <LogoPair height={28} />
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{ display: "flex", gap: 5 }}>
-              {[1, 2, 3, 4, 5, 6, 7].map((s) => (
-                <div
-                  key={s}
-                  style={{
-                    width: 28,
-                    height: 5,
-                    borderRadius: 999,
-                    background: s <= step ? TEAL : "#E4E9F0",
-                    transition: "background 0.3s",
-                  }}
-                />
-              ))}
-            </div>
-            <span
-              style={{
-                fontSize: 16,
-                fontWeight: 900,
-                color: TEAL,
-                fontFamily: ff,
-                background: "#EEF9F8",
-                padding: "3px 10px",
-                borderRadius: 999,
-              }}
-            >
-              {pct}%
-            </span>
-          </div>
+          <div />
         </div>
 
         {/* Split body */}
@@ -218,7 +191,7 @@ export default function QuestionScreen({
                 width: 160,
                 height: 160,
                 borderRadius: "50%",
-                border: "30px solid rgba(13,148,136,0.1)",
+                border: "30px solid rgba(0,87,168,0.1)",
                 pointerEvents: "none",
               }}
             />
@@ -230,7 +203,7 @@ export default function QuestionScreen({
                 color: TEAL,
                 fontWeight: 700,
                 marginBottom: 22,
-                background: "rgba(13,148,136,0.15)",
+                background: "rgba(0,87,168,0.15)",
                 padding: "5px 14px",
                 borderRadius: 999,
                 width: "fit-content",
@@ -266,24 +239,73 @@ export default function QuestionScreen({
                 {question.subtitle ?? multiHintText}
               </p>
             )}
-            <div style={{ display: "flex", gap: 8, marginTop: 48 }}>
-              {[1, 2, 3, 4, 5, 6, 7].map((s) => (
-                <div
-                  key={s}
+            <div
+              style={{
+                marginTop: 42,
+                width: "100%",
+                maxWidth: 340,
+                padding: "14px 16px 15px",
+                borderRadius: 14,
+                background: "rgba(255,255,255,0.07)",
+                border: "1px solid rgba(255,255,255,0.12)",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: 16,
+                  marginBottom: 11,
+                }}
+              >
+                <span
                   style={{
-                    width: s === step ? 28 : 8,
-                    height: 8,
-                    borderRadius: 999,
-                    background:
-                      s === step
-                        ? TEAL
-                        : s < step
-                          ? "rgba(255,255,255,0.35)"
-                          : "rgba(255,255,255,0.12)",
-                    transition: "all 0.3s",
+                    fontSize: 12,
+                    color: "rgba(255,255,255,0.55)",
+                    fontWeight: 600,
+                    fontFamily: ff,
                   }}
-                />
-              ))}
+                >
+                  {ui.stepOf(step)}
+                </span>
+                <span
+                  style={{
+                    minWidth: 46,
+                    padding: "4px 8px",
+                    borderRadius: 8,
+                    background: "rgba(0,87,168,0.35)",
+                    border: "1px solid rgba(255,255,255,0.1)",
+                    fontSize: 12,
+                    fontWeight: 800,
+                    color: "white",
+                    textAlign: "center",
+                    fontFamily: ff,
+                  }}
+                >
+                  {pct}%
+                </span>
+              </div>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(7, 1fr)",
+                  gap: 5,
+                  width: "100%",
+                }}
+              >
+                {[1, 2, 3, 4, 5, 6, 7].map((s) => (
+                  <div
+                    key={s}
+                    style={{
+                      height: 5,
+                      borderRadius: 999,
+                      background: s <= step ? TEAL : "rgba(255,255,255,0.14)",
+                      transition: "background 0.3s",
+                    }}
+                  />
+                ))}
+              </div>
             </div>
           </div>
 
@@ -292,8 +314,8 @@ export default function QuestionScreen({
             style={{
               flex: 1,
               background: PAGE,
-              padding: "48px 52px",
-              overflowY: "auto",
+              padding: "20px 52px",
+              overflow: "hidden",
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
@@ -303,15 +325,15 @@ export default function QuestionScreen({
             <div className="fade-up">
               {optionGrid}
               {otherInput}
-              <div style={{ marginTop: 32 }}>
+              <div style={{ marginTop: 16 }}>
                 <button
                   onClick={onContinue}
                   disabled={!canContinue}
                   style={{
-                    padding: "18px 52px",
-                    borderRadius: 16,
+                    padding: "14px 44px",
+                    borderRadius: 12,
                     fontWeight: 700,
-                    fontSize: 17,
+                    fontSize: 16,
                     border: "none",
                     cursor: canContinue ? "pointer" : "default",
                     background: canContinue ? NAVY : "#DDE3EC",
@@ -346,8 +368,9 @@ export default function QuestionScreen({
         style={{
           ...inner,
           flex: 1,
-          overflowY: "auto",
-          padding: "26px 20px 130px",
+          minHeight: 0,
+          overflow: "hidden",
+          padding: "14px 16px 94px",
         }}
         className="scrollbar-hide"
       >
@@ -377,7 +400,7 @@ export default function QuestionScreen({
           >
             {question.title}
           </h2>
-          <p style={{ fontSize: 13, color: T3, marginBottom: 22 }}>
+          <p style={{ fontSize: 12, color: T3, marginBottom: 12 }}>
             {question.subtitle ??
               (question.type === "multi" ? ui.multiHint : " ")}
           </p>

@@ -1,9 +1,9 @@
 import React from "react";
-import holdcoLogo from "@/assets/Holdco_corp_logo.png";
+import LogoPair from "@/components/layout/LogoPair";
 import { inner } from "@/theme/styles";
 import { BORDER, CARD, T3 } from "@/theme/tokens";
 
-/** Compact header with Holdco logo and a subtitle. */
+/** Compact header with Holdco + Axiom logos and a subtitle. */
 export default function TopBanner({
   subtitle,
   fontFamily,
@@ -15,29 +15,29 @@ export default function TopBanner({
     <div
       style={{
         background: CARD,
-        padding: "20px 24px 18px",
+        padding: "14px 20px 13px",
         flexShrink: 0,
         borderBottom: `1px solid ${BORDER}`,
       }}
     >
-      <div style={{ ...inner, display: "flex", justifyContent: "center" }}>
-        <img
-          src={holdcoLogo}
-          alt="Holdco Corp"
-          style={{ height: 34, width: "auto", objectFit: "contain" }}
-        />
+      <div style={{ ...inner, display: "flex", justifyContent: "flex-start" }}>
+        <LogoPair height={34} />
       </div>
-      <p
-        style={{
-          color: T3,
-          fontSize: 13,
-          marginTop: 10,
-          textAlign: "center",
-          fontFamily: fontFamily ?? "'Inter', sans-serif",
-        }}
-      >
-        {subtitle}
-      </p>
+      {subtitle ? (
+        <p
+          style={{
+            ...inner,
+            color: T3,
+            fontSize: 11,
+            marginTop: 7,
+            textAlign: "left",
+            fontFamily: fontFamily ?? "'Inter', sans-serif",
+            letterSpacing: 0.2,
+          }}
+        >
+          {subtitle}
+        </p>
+      ) : null}
     </div>
   );
 }

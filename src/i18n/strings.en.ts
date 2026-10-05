@@ -27,7 +27,8 @@ export const UI_EN: UiStrings = {
   formTitle: "Want your personalized results?",
   formSubtitle:
     "Get your Digital Maturity Score + a free 15-min consultation.",
-  formNote: "We'll send your full score + personalized tip to this email.",
+  formNote:
+    "You'll receive two separate emails: your score report and your official giveaway code.",
   formSubmit: "Get My Score",
   formFields: [
     {
