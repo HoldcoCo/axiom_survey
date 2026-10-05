@@ -2,17 +2,23 @@
  * ERPNext Lead + Opportunity creation — same flow as axiom_website.
  *
  * 1. Find existing Lead by email (or create one)
- * 2. Create an Opportunity linked to that Lead
- * 3. Attach Digital Health Check answers as a CRM Note on the Opportunity
+ * 2. Assign `custom_giveaway_code` (reuse if the lead already has one)
+ * 3. Create an Opportunity linked to that Lead
+ * 4. Attach Digital Health Check answers as a CRM Note on the Opportunity
+ * 5. Email the score report and a separate giveaway-code message
  */
 import { mapToFrappeLead, mapToFrappeOpportunity } from "../src/lib/mapToFrappeLead.js";
 import { formatAnswersAsHtmlNote } from "../src/lib/serializeAnswers.js";
+import {
+  generateGiveawayCode,
+  normalizeGiveawayCode,
+} from "../src/lib/giveawayCode.js";
 import type {
   LeadFormData,
   LeadSubmissionPayload,
   SerializedAnswer,
 } from "../src/types/index.js";
-import { sendReportEmail } from "./emailReport.js";
+import { sendGiveawayCodeEmail, sendReportEmail } from "./emailReport.js";
 
 export interface ErpNextConfig {
   baseUrl: string;
@@ -31,6 +37,7 @@ export interface LeadHandlerResult {
 interface ErpNextApiResponse {
   data?: {
     name?: string;
+    custom_giveaway_code?: string;
   };
   message?: string;
   exception?: string;
@@ -39,11 +46,12 @@ interface ErpNextApiResponse {
 }
 
 interface ErpNextListResponse {
-  data?: Array<{ name?: string }>;
+  data?: Array<{ name?: string; custom_giveaway_code?: string }>;
 }
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const LEAD_NAME_PATTERN = /CRM-LEAD-\d{4}-\d+/i;
+const MAX_GIVEAWAY_CODE_ATTEMPTS = 8;
 
 /**
  * Loads ERPNext credentials from the same env vars as axiom_website,
@@ -225,6 +233,108 @@ async function findLeadByEmail(
   return typeof leadName === "string" && leadName.length > 0 ? leadName : null;
 }
 
+/**
+ * Returns the lead's existing `custom_giveaway_code`, or null if they do not have one.
+ */
+async function getLeadGiveawayCode(
+  config: ErpNextConfig,
+  leadName: string,
+): Promise<string | null> {
+  const response = await erpNextFetch(
+    config,
+    `/api/resource/Lead/${encodeURIComponent(leadName)}`,
+    { method: "GET" },
+  );
+  if (!response.ok) {
+    console.error(
+      "[erpnext] Giveaway code lookup failed",
+      response.status,
+      parseErpNextError((await response.json()) as ErpNextApiResponse),
+    );
+    return null;
+  }
+  const body = (await response.json()) as ErpNextApiResponse;
+  return normalizeGiveawayCode(body.data?.custom_giveaway_code);
+}
+
+/** Returns true when another Lead already stores this giveaway code. */
+async function isGiveawayCodeTaken(
+  config: ErpNextConfig,
+  code: string,
+): Promise<boolean> {
+  const filters = encodeURIComponent(
+    JSON.stringify([["custom_giveaway_code", "=", code]]),
+  );
+  const fields = encodeURIComponent(JSON.stringify(["name"]));
+  const response = await erpNextFetch(
+    config,
+    `/api/resource/Lead?filters=${filters}&fields=${fields}&limit_page_length=1`,
+    { method: "GET" },
+  );
+  if (!response.ok) {
+    console.error(
+      "[erpnext] Giveaway code uniqueness check failed",
+      response.status,
+      parseErpNextError((await response.json()) as ErpNextApiResponse),
+    );
+    return false;
+  }
+  const body = (await response.json()) as ErpNextListResponse;
+  const existing = body.data?.[0]?.name;
+  return typeof existing === "string" && existing.length > 0;
+}
+
+/**
+ * Generates a giveaway code that is not already stored on another Lead.
+ */
+async function createUniqueGiveawayCode(config: ErpNextConfig): Promise<string> {
+  for (let attempt = 0; attempt < MAX_GIVEAWAY_CODE_ATTEMPTS; attempt++) {
+    const code = generateGiveawayCode();
+    if (!(await isGiveawayCodeTaken(config, code))) {
+      return code;
+    }
+  }
+  return generateGiveawayCode();
+}
+
+/** Writes `custom_giveaway_code` onto an existing Lead. */
+async function saveLeadGiveawayCode(
+  config: ErpNextConfig,
+  leadName: string,
+  code: string,
+): Promise<boolean> {
+  const response = await erpNextFetch(
+    config,
+    `/api/resource/Lead/${encodeURIComponent(leadName)}`,
+    {
+      method: "PUT",
+      body: JSON.stringify({ custom_giveaway_code: code }),
+    },
+  );
+  if (response.ok) return true;
+  console.error(
+    "[erpnext] Failed to save custom_giveaway_code",
+    response.status,
+    parseErpNextError((await response.json()) as ErpNextApiResponse),
+  );
+  return false;
+}
+
+/**
+ * Reuses the lead's existing giveaway code, or generates and stores a new one.
+ */
+async function ensureLeadGiveawayCode(
+  config: ErpNextConfig,
+  leadName: string,
+): Promise<string | null> {
+  const existing = await getLeadGiveawayCode(config, leadName);
+  if (existing !== null) return existing;
+
+  const code = await createUniqueGiveawayCode(config);
+  const saved = await saveLeadGiveawayCode(config, leadName, code);
+  return saved ? code : null;
+}
+
 /** Resolve the ERPNext company used when creating Opportunities. */
 async function resolveCompanyName(config: ErpNextConfig): Promise<string | null> {
   if (config.company.length > 0) return config.company;
@@ -246,6 +356,7 @@ async function resolveCompanyName(config: ErpNextConfig): Promise<string | null>
 async function createLead(
   config: ErpNextConfig,
   payload: LeadSubmissionPayload,
+  giveawayCode: string,
 ): Promise<{ ok: true; name: string } | { ok: false; message: string }> {
   const leadDoc = mapToFrappeLead({
     name: payload.form.name,
@@ -254,6 +365,7 @@ async function createLead(
     phone: payload.form.phone,
     whatsapp: payload.form.whatsapp,
     source: config.leadSource,
+    customGiveawayCode: giveawayCode,
   });
 
   const response = await erpNextFetch(config, "/api/resource/Lead", {
@@ -384,12 +496,15 @@ export async function submitAssessmentToErpNext(
 
   let leadName = await findLeadByEmail(config, email);
   if (leadName === null) {
-    const leadResult = await createLead(config, payload);
+    const generatedCode = await createUniqueGiveawayCode(config);
+    const leadResult = await createLead(config, payload, generatedCode);
     if (!leadResult.ok) {
       return { status: 502, body: { ok: false, error: "upstream" } };
     }
     leadName = leadResult.name;
   }
+
+  const giveawayCode = await ensureLeadGiveawayCode(config, leadName);
 
   const opportunityResult = await createOpportunity(
     config,
@@ -403,15 +518,25 @@ export async function submitAssessmentToErpNext(
 
   await addOpportunityNote(config, opportunityResult.name, noteHtml);
 
-  const emailSent = await sendReportEmail({
-    to: email,
-    name: name,
-    company: payload.form.company.trim(),
-    score: payload.score,
-    levelLabel: payload.levelLabel,
-    lang: payload.lang,
-    answers: payload.answers,
-  });
+  const [emailSent] = await Promise.all([
+    sendReportEmail({
+      to: email,
+      name: name,
+      company: payload.form.company.trim(),
+      score: payload.score,
+      levelLabel: payload.levelLabel,
+      lang: payload.lang,
+      answers: payload.answers,
+    }),
+    giveawayCode !== null
+      ? sendGiveawayCodeEmail({
+          to: email,
+          name: name,
+          code: giveawayCode,
+          lang: payload.lang,
+        })
+      : Promise.resolve(false),
+  ]);
 
   return { status: 200, body: { ok: true, emailSent } };
 }

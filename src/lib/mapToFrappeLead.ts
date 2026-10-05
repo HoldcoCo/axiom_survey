@@ -39,6 +39,7 @@ export function mapToFrappeLead(input: {
   phone: string;
   whatsapp: string;
   source?: string;
+  customGiveawayCode?: string;
 }): FrappeLeadFields {
   const { first_name, last_name } = splitLeadName(input.name);
   const phone = input.phone.trim();
@@ -65,6 +66,9 @@ export function mapToFrappeLead(input: {
   }
   if (mobile.length > 0) {
     doc.mobile_no = mobile;
+  }
+  if (input.customGiveawayCode && input.customGiveawayCode.length > 0) {
+    doc.custom_giveaway_code = input.customGiveawayCode;
   }
 
   return doc;

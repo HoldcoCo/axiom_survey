@@ -44,6 +44,19 @@ describe("mapToFrappeLead", () => {
     expect(doc.mobile_no).toBe("+971501234567");
     expect(doc.source).toBe("Website");
     expect(doc.request_type).toBeUndefined();
+    expect(doc.custom_giveaway_code).toBeUndefined();
+  });
+
+  it("includes custom_giveaway_code when provided", () => {
+    const doc = mapToFrappeLead({
+      name: "Sara Mansoori",
+      company: "Holdco",
+      email: "sara@example.ae",
+      phone: "+971501234567",
+      whatsapp: "",
+      customGiveawayCode: "K7MP-9Q2X",
+    });
+    expect(doc.custom_giveaway_code).toBe("K7MP-9Q2X");
   });
 
   it("prefers WhatsApp for mobile_no when provided", () => {

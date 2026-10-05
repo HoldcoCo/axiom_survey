@@ -2,9 +2,10 @@
  * Production Vite config for Vercel hosting, plus a local /api/lead proxy
  * so Digital Health Check submissions work in `vite` the same way they do on Vercel.
  */
-import { defineConfig, loadEnv, type Plugin } from "vite";
+import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
+import fs from "node:fs";
 import path from "node:path";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { handleLeadRequest } from "./server/erpnextLead";
@@ -29,8 +30,58 @@ const SERVER_ENV_KEYS = [
 ] as const;
 
 /**
+ * Minimal .env parser. Vite 8's loadEnv uses node:util parseEnv, which
+ * treats a blank line plus comments as part of the next key name, so
+ * ERPNEXT_BASE_URL / SMTP_HOST never land in process.env.
+ */
+function parseDotEnv(content: string): Record<string, string> {
+  const parsed: Record<string, string> = {};
+  for (const rawLine of content.split(/\r?\n/)) {
+    const line = rawLine.trim();
+    if (line.length === 0 || line.startsWith("#")) continue;
+    const eq = line.indexOf("=");
+    if (eq <= 0) continue;
+    const key = line.slice(0, eq).trim();
+    if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(key)) continue;
+    let value = line.slice(eq + 1).trim();
+    if (!value.startsWith('"') && !value.startsWith("'")) {
+      const commentAt = value.indexOf("#");
+      if (commentAt >= 0) value = value.slice(0, commentAt).trimEnd();
+    }
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
+      value = value.slice(1, -1);
+    }
+    parsed[key] = value;
+  }
+  return parsed;
+}
+
+/** Reads `.env`, `.env.local`, and mode-specific files from envDir. */
+function loadServerEnvFiles(
+  envDir: string,
+  mode: string,
+): Record<string, string> {
+  const files = [
+    ".env",
+    ".env.local",
+    `.env.${mode}`,
+    `.env.${mode}.local`,
+  ];
+  const merged: Record<string, string> = {};
+  for (const file of files) {
+    const filePath = path.join(envDir, file);
+    if (!fs.existsSync(filePath)) continue;
+    Object.assign(merged, parseDotEnv(fs.readFileSync(filePath, "utf8")));
+  }
+  return merged;
+}
+
+/**
  * Copies server-only .env values into process.env for the local API route.
- * @param env - Result of Vite loadEnv
+ * @param env - Parsed .env values
  */
 function applyServerEnv(env: Record<string, string>): void {
   for (const key of SERVER_ENV_KEYS) {
@@ -102,8 +153,8 @@ function leadApiDevPlugin(): Plugin {
 
 export default defineConfig(({ mode }) => {
   const isDev = mode === "development";
-  const env = loadEnv(mode, process.cwd(), "");
-  applyServerEnv(env);
+  const envDir = path.resolve(__dirname);
+  applyServerEnv(loadServerEnvFiles(envDir, mode));
 
   return {
     base: "/",

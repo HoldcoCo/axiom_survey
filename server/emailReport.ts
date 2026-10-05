@@ -29,6 +29,13 @@ export interface ReportEmailPayload {
   answers: SerializedAnswer[];
 }
 
+export interface GiveawayEmailPayload {
+  to: string;
+  name: string;
+  code: string;
+  lang: Lang;
+}
+
 interface Recommendation {
   title: string;
   body: string;
@@ -606,28 +613,120 @@ function buildReportEmailHtml(payload: ReportEmailPayload): string {
 </html>`;
 }
 
+/* ────────────────────────── Giveaway Code Email ─────────────────── */
+
+/**
+ * Builds a short branded HTML email that shows the lead their giveaway code.
+ */
+function buildGiveawayEmailHtml(payload: GiveawayEmailPayload): string {
+  const { name, code, lang } = payload;
+  const isAr = lang === "ar";
+  const dir = isAr ? "rtl" : "ltr";
+  const align = isAr ? "right" : "left";
+  const ff = isAr
+    ? "Cairo, Tahoma, Arial, sans-serif"
+    : "Inter, Arial, Helvetica, sans-serif";
+  const navy = "#1B2C4B";
+  const teal = "#0D9488";
+  const greeting =
+    name.trim().length > 0
+      ? isAr
+        ? `مرحباً ${escapeHtml(name.trim())}`
+        : `Hi ${escapeHtml(name.trim())}`
+      : isAr
+        ? "مرحباً"
+        : "Hi";
+  const preheader = isAr
+    ? `رمز السحب الخاص بك: ${code}`
+    : `Your giveaway code: ${code}`;
+
+  return `<!DOCTYPE html>
+<html lang="${lang}" dir="${dir}">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>${escapeHtml(preheader)}</title>
+</head>
+<body style="margin:0;padding:0;background-color:#F0F4FA;width:100%;font-family:${ff};">
+  <div style="display:none;font-size:1px;color:#F0F4FA;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;">
+    ${escapeHtml(preheader)}
+    ${"&zwnj;&nbsp;".repeat(20)}
+  </div>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F0F4FA;">
+    <tr>
+      <td align="center" style="padding:24px 16px;">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;margin:0 auto;">
+          <tr>
+            <td style="background:${navy};border-radius:16px 16px 0 0;padding:36px 32px;text-align:center;">
+              <p style="margin:0 0 12px;font-family:${ff};font-size:11px;color:rgba(255,255,255,0.6);letter-spacing:2.5px;text-transform:uppercase;font-weight:700;">
+                ${isAr ? "رمز السحب" : "Giveaway Code"}
+              </p>
+              <h1 style="margin:0;font-family:${ff};font-size:26px;font-weight:900;color:#FFFFFF;line-height:1.3;">
+                ${greeting}
+              </h1>
+            </td>
+          </tr>
+          <tr>
+            <td style="background:#FFFFFF;padding:32px;text-align:${align};">
+              <p style="margin:0 0 20px;font-family:${ff};font-size:15px;color:${navy};line-height:1.8;">
+                ${
+                  isAr
+                    ? "شكراً لإكمال تقييم الصحة الرقمية. هذا هو رمز السحب الخاص بك — احتفظ به للدخول."
+                    : "Thanks for completing the Digital Health Check. Here is your unique giveaway code — keep it handy to enter."
+                }
+              </p>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="background:#F0F4FA;border:2px dashed ${teal};border-radius:14px;padding:22px 16px;text-align:center;">
+                    <p style="margin:0 0 8px;font-family:${ff};font-size:11px;font-weight:800;color:${teal};letter-spacing:1.8px;text-transform:uppercase;">
+                      ${isAr ? "رمزك" : "Your code"}
+                    </p>
+                    <p style="margin:0;font-family:${ff};font-size:32px;font-weight:900;color:${navy};letter-spacing:4px;line-height:1.2;">
+                      ${escapeHtml(code)}
+                    </p>
+                  </td>
+                </tr>
+              </table>
+              <p style="margin:20px 0 0;font-family:${ff};font-size:13px;color:#64748B;line-height:1.7;">
+                ${
+                  isAr
+                    ? "قدّم هذا الرمز عند الطلب للمشاركة في السحب. الرمز مرتبط ببريدك ولن يتغيّر إذا أعدت التقييم."
+                    : "Present this code when asked to claim your entry. It is tied to your email and will stay the same if you retake the assessment."
+                }
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:24px 32px;text-align:center;">
+              <p style="margin:0;font-family:${ff};font-size:13px;font-weight:700;color:${navy};">Holdco</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+}
+
 /* ────────────────────────── Send Email ──────────────────────────── */
 
 /**
- * Sends the HTML report email via SMTP.
+ * Sends an HTML email via SMTP.
  * Returns true on success, false on failure or missing config.
  * Never throws — all errors are caught and logged.
  */
-export async function sendReportEmail(
-  payload: ReportEmailPayload,
+async function sendHtmlEmail(
+  to: string,
+  subject: string,
+  html: string,
+  logLabel: string,
 ): Promise<boolean> {
   const smtp = getSmtpConfig();
   if (smtp === null) {
-    console.log("[email] SMTP not configured — skipping report email");
+    console.log(`[email] SMTP not configured — skipping ${logLabel}`);
     return false;
   }
-
-  const isAr = payload.lang === "ar";
-  const subject = isAr
-    ? `درجة النضوج الرقمي: ${String(payload.score)}/100`
-    : `Your Digital Maturity Score: ${String(payload.score)}/100`;
-
-  const html = buildReportEmailHtml(payload);
 
   try {
     const { default: nodemailer } = await import("nodemailer");
@@ -640,16 +739,57 @@ export async function sendReportEmail(
 
     await transport.sendMail({
       from: `"${smtp.fromName}" <${smtp.from}>`,
-      to: payload.to,
+      to,
       subject,
       html,
     });
 
-    console.log(`[email] Report sent to ${payload.to}`);
+    console.log(`[email] ${logLabel} sent to ${to}`);
     return true;
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Unknown SMTP error";
-    console.error(`[email] Failed to send report to ${payload.to}:`, message);
+    console.error(`[email] Failed to send ${logLabel} to ${to}:`, message);
     return false;
   }
+}
+
+/**
+ * Sends the HTML report email via SMTP.
+ * Returns true on success, false on failure or missing config.
+ * Never throws — all errors are caught and logged.
+ */
+export async function sendReportEmail(
+  payload: ReportEmailPayload,
+): Promise<boolean> {
+  const isAr = payload.lang === "ar";
+  const subject = isAr
+    ? `درجة النضوج الرقمي: ${String(payload.score)}/100`
+    : `Your Digital Maturity Score: ${String(payload.score)}/100`;
+
+  return sendHtmlEmail(
+    payload.to,
+    subject,
+    buildReportEmailHtml(payload),
+    "Report",
+  );
+}
+
+/**
+ * Sends the lead their giveaway code in a separate email.
+ * Returns true on success, false on failure or missing config.
+ */
+export async function sendGiveawayCodeEmail(
+  payload: GiveawayEmailPayload,
+): Promise<boolean> {
+  const isAr = payload.lang === "ar";
+  const subject = isAr
+    ? `رمز السحب الخاص بك: ${payload.code}`
+    : `Your giveaway code: ${payload.code}`;
+
+  return sendHtmlEmail(
+    payload.to,
+    subject,
+    buildGiveawayEmailHtml(payload),
+    "Giveaway code",
+  );
 }
