@@ -68,7 +68,9 @@ export default function LangScreen({
       <div
         style={{
           backgroundColor: PAGE,
-          minHeight: "100vh",
+          height: "100dvh",
+          minHeight: 0,
+          overflowY: "auto",
           display: "flex",
           flexDirection: "column",
           fontFamily: "'Inter', 'Cairo', sans-serif",
@@ -267,7 +269,9 @@ export default function LangScreen({
     <div
       style={{
         backgroundColor: PAGE,
-        minHeight: "100vh",
+        height: "100dvh",
+        minHeight: 0,
+        overflowY: "auto",
         display: "flex",
         flexDirection: "column",
         fontFamily: "'Inter', 'Cairo', sans-serif",

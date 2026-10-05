@@ -503,6 +503,7 @@ export default function FormScreen({
           <div
             style={{
               flex: 1,
+              minHeight: 0,
               background: PAGE,
               padding: "48px 52px",
               overflowY: "auto",
@@ -560,6 +561,7 @@ export default function FormScreen({
         style={{
           ...inner,
           flex: 1,
+          minHeight: 0,
           overflowY: "auto",
           padding: "14px 16px 94px",
         }}

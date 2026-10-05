@@ -39,7 +39,8 @@ export default function LoadingScreen({ lang }: { lang: Lang }) {
       style={{
         ...ws(lang),
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "safe center",
+        overflowY: "auto",
         background: PAGE,
       }}
     >

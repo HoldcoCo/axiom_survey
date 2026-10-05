@@ -22,12 +22,12 @@ export default function DrawEntryScreen({
 
   return (
     <div
-      style={{
-        ...ws(lang),
-        alignItems: "center",
-        minHeight: "100vh",
-        background: "linear-gradient(180deg, #EFF6FF 0%, #F4F8FC 70%)",
-      }}
+        style={{
+          ...ws(lang),
+          alignItems: "center",
+          overflowY: "auto",
+          background: "linear-gradient(180deg, #EFF6FF 0%, #F4F8FC 70%)",
+        }}
     >
       <div style={{ width: "100%" }}>
         <TopBanner subtitle="" fontFamily={ff} />
@@ -38,8 +38,12 @@ export default function DrawEntryScreen({
           width: "100%",
           maxWidth: isTablet ? 620 : 430,
           flex: 1,
+          minHeight: 0,
+          overflowY: "auto",
           padding: isTablet ? "64px 40px" : "36px 20px 44px",
           display: "flex",
+          flexDirection: "column",
+          justifyContent: "safe center",
           alignItems: "center",
         }}
       >

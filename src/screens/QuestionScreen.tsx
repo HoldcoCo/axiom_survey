@@ -315,10 +315,11 @@ export default function QuestionScreen({
               flex: 1,
               background: PAGE,
               padding: "20px 52px",
-              overflow: "hidden",
+              overflowY: "auto",
+              minHeight: 0,
               display: "flex",
               flexDirection: "column",
-              justifyContent: "center",
+              justifyContent: "safe center",
             }}
             className="scrollbar-hide"
           >
@@ -369,7 +370,7 @@ export default function QuestionScreen({
           ...inner,
           flex: 1,
           minHeight: 0,
-          overflow: "hidden",
+          overflowY: "auto",
           padding: "14px 16px 94px",
         }}
         className="scrollbar-hide"

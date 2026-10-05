@@ -49,9 +49,10 @@ export default function HookScreen({ onNext }: { onNext: () => void }) {
               padding: "56px 64px",
               display: "flex",
               flexDirection: "column",
-              justifyContent: "center",
+              justifyContent: "safe center",
               position: "relative",
-              overflow: "hidden",
+              overflowY: "auto",
+              minHeight: 0,
               borderRight: `1px solid ${BORDER}`,
             }}
           >
@@ -258,6 +259,7 @@ export default function HookScreen({ onNext }: { onNext: () => void }) {
           ...inner,
           flex: 1,
           minHeight: 0,
+          overflowY: "auto",
           display: "flex",
           flexDirection: "column",
           padding: "22px 22px 24px",
@@ -268,11 +270,8 @@ export default function HookScreen({ onNext }: { onNext: () => void }) {
         <div
           className="fade-up"
           style={{
-            flex: 1,
-            minHeight: 0,
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
+            margin: "auto 0",
+            width: "100%",
           }}
         >
           <div
