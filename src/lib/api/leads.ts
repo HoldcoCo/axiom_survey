@@ -39,7 +39,12 @@ export async function submitLead(
       const emailSent =
         "emailSent" in data &&
         (data as { emailSent: unknown }).emailSent === true;
-      return { ok: true, emailSent };
+      const giveawayCode =
+        "giveawayCode" in data &&
+        typeof (data as { giveawayCode: unknown }).giveawayCode === "string"
+          ? (data as { giveawayCode: string }).giveawayCode
+          : undefined;
+      return { ok: true, emailSent, giveawayCode };
     }
     return { ok: false, error: "upstream" };
   } catch {

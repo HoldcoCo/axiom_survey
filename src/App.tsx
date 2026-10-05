@@ -16,6 +16,7 @@ import LoadingScreen from "@/screens/LoadingScreen";
 import QuestionScreen from "@/screens/QuestionScreen";
 import ReportScreen from "@/screens/ReportScreen";
 import RevealScreen from "@/screens/RevealScreen";
+import DrawEntryScreen from "@/screens/DrawEntryScreen";
 import {
   emptyLeadForm,
   type AnswerMap,
@@ -58,6 +59,7 @@ export default function App() {
   const [emailStatus, setEmailStatus] = useState<EmailStatus>("idle");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [honeypotValue, setHoneypotValue] = useState("");
+  const [ticketNumber, setTicketNumber] = useState("");
 
   useDocumentLang(lang);
 
@@ -66,7 +68,7 @@ export default function App() {
     [lang],
   );
 
-  const displayScore = useCountUp(score, step === 9 && !showReport);
+  const displayScore = useCountUp(score, step === 10 && !showReport);
 
   /**
    * Posts the lead to /api/lead (ERPNext via Vercel). Never blocks the score reveal.
@@ -85,6 +87,9 @@ export default function App() {
         answers: serialized,
         website,
       });
+      if (result.ok && typeof result.giveawayCode === "string") {
+        setTicketNumber(result.giveawayCode);
+      }
       if (result.ok && result.emailSent === true) {
         setEmailStatus("sent");
       } else if (result.ok && result.emailSent === undefined) {
@@ -145,14 +150,16 @@ export default function App() {
     if (lang === null || isSubmitting) return;
     setIsSubmitting(true);
     setHoneypotValue(honeypot);
+    setTicketNumber("");
     const computed = computeScore(answers, qs);
     setScore(computed);
     setStep(8);
-    void postLead(computed, honeypot);
-    window.setTimeout(() => {
-      setStep(9);
-      setIsSubmitting(false);
-    }, 2600);
+    const minimumWait = new Promise((resolve) => {
+      window.setTimeout(resolve, 2600);
+    });
+    await Promise.all([postLead(computed, honeypot), minimumWait]);
+    setStep(9);
+    setIsSubmitting(false);
   }
 
   function handleBack() {
@@ -180,6 +187,7 @@ export default function App() {
     setEmailStatus("idle");
     setIsSubmitting(false);
     setHoneypotValue("");
+    setTicketNumber("");
   }
 
   function handleResend() {
@@ -215,25 +223,37 @@ export default function App() {
     return <LoadingScreen lang={lang} />;
   }
 
-  if (step === 9 && showReport) {
+  if (step === 9) {
+    return (
+      <DrawEntryScreen
+        ticketNumber={ticketNumber}
+        lang={lang}
+        onContinue={() => setStep(10)}
+      />
+    );
+  }
+
+  if (step === 10 && showReport) {
     return (
       <ReportScreen
         score={score}
         answers={answers}
         formData={formData}
+        ticketNumber={ticketNumber}
         lang={lang}
         onBack={() => setShowReport(false)}
       />
     );
   }
 
-  if (step === 9) {
+  if (step === 10) {
     return (
       <RevealScreen
         key={`reveal-${score}`}
         score={score}
         displayScore={displayScore}
         email={formData.email}
+        ticketNumber={ticketNumber}
         lang={lang}
         emailStatus={emailStatus}
         onViewReport={() => setShowReport(true)}

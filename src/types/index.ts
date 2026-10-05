@@ -101,4 +101,6 @@ export interface LeadSubmissionResult {
   error?: "validation" | "rate_limit" | "upstream" | "config" | "network";
   /** Whether the HTML report email was sent successfully. */
   emailSent?: boolean;
+  /** Giveaway ticket stored on the ERPNext lead. */
+  giveawayCode?: string;
 }

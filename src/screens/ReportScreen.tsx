@@ -14,6 +14,7 @@ export interface ReportProps {
   score: number;
   answers: AnswerMap;
   formData: LeadFormData;
+  ticketNumber: string;
   lang: Lang;
   onBack: () => void;
 }
@@ -22,6 +23,7 @@ export default function ReportScreen({
   score,
   answers,
   formData,
+  ticketNumber,
   lang,
   onBack,
 }: ReportProps) {
@@ -437,6 +439,11 @@ export default function ReportScreen({
                 {formData.company ? <span>{formData.company}</span> : null}
                 {formData.email ? <span dir="ltr">{formData.email}</span> : null}
                 {formData.phone ? <span dir="ltr">{formData.phone}</span> : null}
+                {ticketNumber ? (
+                  <span dir="ltr">
+                    {isAr ? "رقم التذكرة" : "Ticket"}: {ticketNumber}
+                  </span>
+                ) : null}
               </div>
             </div>
             <div

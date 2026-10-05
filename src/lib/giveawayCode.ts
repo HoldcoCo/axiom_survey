@@ -3,22 +3,15 @@
  * Codes are stored on the ERPNext Lead as `custom_giveaway_code`.
  */
 
-/** Alphabet avoids 0/O and 1/I so codes stay readable in email. */
-const ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-const CODE_LENGTH = 8;
-
 /**
- * Generates a unique-looking giveaway code in `XXXX-XXXX` form.
+ * Generates a 9-digit giveaway ticket.
  * Collision checks against existing leads happen in the ERPNext handler.
  */
 export function generateGiveawayCode(): string {
-  const bytes = new Uint8Array(CODE_LENGTH);
+  const bytes = new Uint32Array(1);
   crypto.getRandomValues(bytes);
-  let raw = "";
-  for (const byte of bytes) {
-    raw += ALPHABET[byte % ALPHABET.length];
-  }
-  return `${raw.slice(0, 4)}-${raw.slice(4)}`;
+  const value = bytes[0] % 1_000_000_000;
+  return String(value).padStart(9, "0");
 }
 
 /**

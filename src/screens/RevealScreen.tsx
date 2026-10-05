@@ -4,7 +4,6 @@ import { UI } from "@/i18n";
 import IconShape from "@/components/icons/IconShape";
 import LogoPair from "@/components/layout/LogoPair";
 import { useIsTablet } from "@/hooks/useIsTablet";
-import { getBookingUrl } from "@/lib/bookingUrl";
 import { getLevel } from "@/lib/scoring";
 import { ws, inner, innerWide } from "@/theme/styles";
 import { BORDER, CARD, NAVY, T1, T2, T3, TEAL } from "@/theme/tokens";
@@ -13,6 +12,7 @@ export default function RevealScreen({
   score,
   displayScore,
   email,
+  ticketNumber,
   lang,
   emailStatus,
   onViewReport,
@@ -22,6 +22,7 @@ export default function RevealScreen({
   score: number;
   displayScore: number;
   email: string;
+  ticketNumber: string;
   lang: Lang;
   /** Whether the lead/email POST succeeded. */
   emailStatus: "idle" | "pending" | "sent" | "failed";
@@ -137,42 +138,56 @@ export default function RevealScreen({
         width: "100%",
       }}
     >
-      <p
-        style={{
-          fontSize: isTablet ? 14 : 13,
-          color: T2,
-          textAlign: "center",
-          lineHeight: 1.7,
-          fontFamily: ff,
-        }}
-      >
-        {ui.followUp}
-      </p>
-      <a
-        href={getBookingUrl()}
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{
-          width: "100%",
-          padding: isTablet ? "18px" : "17px",
-          borderRadius: 16,
-          fontWeight: 700,
-          fontSize: isTablet ? 16 : 15,
-          border: "none",
-          cursor: "pointer",
-          background: NAVY,
-          color: "white",
-          boxShadow: "0 6px 22px rgba(27,44,75,0.28)",
-          fontFamily: ff,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 6,
-          textDecoration: "none",
-        }}
-      >
-        {ui.bookBtn} {ui.arrow}
-      </a>
+      {ticketNumber.length > 0 && (
+        <div
+          style={{
+            padding: isTablet ? "18px 22px" : "16px 18px",
+            borderRadius: 16,
+            background: "#F4F8FC",
+            border: `1px solid ${BORDER}`,
+            textAlign: "center",
+          }}
+        >
+          <div
+            style={{
+              fontSize: 11,
+              color: TEAL,
+              fontWeight: 800,
+              letterSpacing: 1,
+              textTransform: "uppercase",
+              marginBottom: 7,
+              fontFamily: ff,
+            }}
+          >
+            {lang === "ar" ? "رقم تذكرة السحب" : "Giveaway Ticket Number"}
+          </div>
+          <div
+            dir="ltr"
+            style={{
+              fontSize: isTablet ? 26 : 23,
+              color: T1,
+              fontWeight: 900,
+              letterSpacing: 3,
+              fontVariantNumeric: "tabular-nums",
+              fontFamily: "'Inter', sans-serif",
+            }}
+          >
+            {ticketNumber}
+          </div>
+          <p
+            style={{
+              fontSize: 11,
+              color: T3,
+              marginTop: 6,
+              fontFamily: ff,
+            }}
+          >
+            {lang === "ar"
+              ? "احتفظ بهذا الرقم للمشاركة في السحب."
+              : "Keep this number for the giveaway draw."}
+          </p>
+        </div>
+      )}
       <button
         onClick={onViewReport}
         style={{
@@ -430,24 +445,20 @@ export default function RevealScreen({
               gap: 24,
             }}
           >
-            {gaugeEl(280, 16, 68)}
-            <p
+            <h1
               className="fade-up"
               style={{
-                fontSize: 18,
-                fontWeight: 700,
+                fontSize: 28,
+                fontWeight: 900,
                 color: T1,
                 textAlign: "center",
                 fontFamily: ff,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 10,
+                marginBottom: -8,
               }}
             >
-              <IconShape name="trophy" size={32} />
               {ui.revealTitle}
-            </p>
+            </h1>
+            {gaugeEl(230, 15, 58)}
             <div
               className="pop-in"
               style={{
@@ -461,7 +472,7 @@ export default function RevealScreen({
                 boxShadow: `0 4px 20px ${level.gaugeColor}28`,
               }}
             >
-              <IconShape name={level.emoji} size={48} />
+              <IconShape name={level.emoji} size={44} />
               <div>
                 <div
                   style={{
@@ -487,74 +498,9 @@ export default function RevealScreen({
                   {level.label}
                 </div>
               </div>
-              <IconShape name="star" size={28} />
             </div>
           </div>
-          {/* Right: message, tip, CTAs */}
           <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-            <div
-              style={{
-                background: CARD,
-                borderRadius: 18,
-                padding: "22px 24px",
-                boxShadow: "0 2px 14px rgba(27,44,75,0.07)",
-                border: `1px solid ${BORDER}`,
-              }}
-            >
-              <p
-                style={{
-                  fontSize: 15,
-                  color: T2,
-                  lineHeight: 1.8,
-                  margin: 0,
-                  fontFamily: ff,
-                }}
-              >
-                {level.message}
-              </p>
-            </div>
-            <div
-              style={{
-                borderRadius: 16,
-                padding: "22px 24px",
-                background: level.accentBg,
-                border: `1px solid ${level.accentBorder}`,
-                ...(lang === "ar"
-                  ? { borderRight: `4px solid ${level.gaugeColor}` }
-                  : { borderLeft: `4px solid ${level.gaugeColor}` }),
-              }}
-            >
-              <div
-                style={{ display: "flex", gap: 14, alignItems: "flex-start" }}
-              >
-                <IconShape name="lightbulb" size={36} />
-                <div>
-                  <div
-                    style={{
-                      fontSize: 12,
-                      fontWeight: 700,
-                      color: level.accent,
-                      letterSpacing: 0.4,
-                      marginBottom: 8,
-                      fontFamily: ff,
-                    }}
-                  >
-                    {ui.quickWinLabel}
-                  </div>
-                  <p
-                    style={{
-                      fontSize: 15,
-                      color: T1,
-                      lineHeight: 1.75,
-                      margin: 0,
-                      fontFamily: ff,
-                    }}
-                  >
-                    {level.tip}
-                  </p>
-                </div>
-              </div>
-            </div>
             {ctaPanel}
           </div>
         </div>
@@ -629,27 +575,20 @@ export default function RevealScreen({
           padding: "32px 22px 50px",
         }}
       >
-        {/* Gauge hero */}
-        <div style={{ marginBottom: 4 }}>{gaugeEl(210, 14, 52)}</div>
-
-        <p
+        <h1
           className="fade-up"
           style={{
-            fontSize: 16,
-            fontWeight: 700,
+            fontSize: 23,
+            fontWeight: 900,
             color: T1,
             textAlign: "center",
             marginBottom: 16,
             fontFamily: ff,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 8,
           }}
         >
-          <IconShape name="trophy" size={28} />
           {ui.revealTitle}
-        </p>
+        </h1>
+        <div style={{ marginBottom: 4 }}>{gaugeEl(165, 13, 43)}</div>
 
         {/* Level badge */}
         <div
@@ -690,70 +629,6 @@ export default function RevealScreen({
               }}
             >
               {level.label}
-            </div>
-          </div>
-          <IconShape name="star" size={24} />
-        </div>
-
-        {/* Message card */}
-        <div
-          style={{
-            width: "100%",
-            background: CARD,
-            borderRadius: 18,
-            padding: "18px 20px",
-            marginBottom: 14,
-            boxShadow: "0 2px 14px rgba(27,44,75,0.07)",
-            border: `1px solid ${BORDER}`,
-          }}
-        >
-          <p
-            style={{
-              fontSize: 14,
-              color: T2,
-              lineHeight: 1.8,
-              margin: 0,
-              fontFamily: ff,
-            }}
-          >
-            {level.message}
-          </p>
-        </div>
-
-        {/* Tip card */}
-        <div
-          style={{
-            width: "100%",
-            borderRadius: 16,
-            padding: "18px 20px",
-            marginBottom: 28,
-            background: level.accentBg,
-            border: `1px solid ${level.accentBorder}`,
-            ...(lang === "ar"
-              ? { borderRight: `4px solid ${level.gaugeColor}` }
-              : { borderLeft: `4px solid ${level.gaugeColor}` }),
-            boxShadow: "0 2px 10px rgba(0,0,0,0.04)",
-          }}
-        >
-          <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
-            <IconShape name="lightbulb" size={38} />
-            <div>
-              <div
-                style={{
-                  fontSize: 12,
-                  fontWeight: 700,
-                  color: level.accent,
-                  letterSpacing: 0.4,
-                  marginBottom: 6,
-                }}
-              >
-                {ui.quickWinLabel}
-              </div>
-              <p
-                style={{ fontSize: 14, color: T1, lineHeight: 1.75, margin: 0 }}
-              >
-                {level.tip}
-              </p>
             </div>
           </div>
         </div>

@@ -31,7 +31,7 @@ export interface ErpNextConfig {
 
 export interface LeadHandlerResult {
   status: number;
-  body: { ok: boolean; error?: string; emailSent?: boolean };
+  body: { ok: boolean; error?: string; emailSent?: boolean; giveawayCode?: string };
 }
 
 interface ErpNextApiResponse {
@@ -538,7 +538,14 @@ export async function submitAssessmentToErpNext(
       : Promise.resolve(false),
   ]);
 
-  return { status: 200, body: { ok: true, emailSent } };
+  return {
+    status: 200,
+    body: {
+      ok: true,
+      emailSent,
+      ...(giveawayCode !== null ? { giveawayCode } : {}),
+    },
+  };
 }
 
 /**

@@ -2,9 +2,9 @@ import { describe, expect, it } from "vitest";
 import { generateGiveawayCode, normalizeGiveawayCode } from "@/lib/giveawayCode";
 
 describe("generateGiveawayCode", () => {
-  it("returns an XXXX-XXXX code using the readable alphabet", () => {
+  it("returns a 9-digit ticket number", () => {
     const code = generateGiveawayCode();
-    expect(code).toMatch(/^[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{4}-[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{4}$/);
+    expect(code).toMatch(/^\d{9}$/);
   });
 
   it("produces different codes across calls", () => {
