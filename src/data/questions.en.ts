@@ -34,18 +34,18 @@ export const QS_EN: QuestionData[] = [
       {
         emoji: "spreadsheet",
         label: "Mostly Excel, WhatsApp & paper",
-        points: 10,
+        points: 5,
       },
       {
         emoji: "laptop",
         label: "Basic system, but disconnected tools",
-        points: 15,
+        points: 10,
       },
-      { emoji: "gear", label: "An ERP, but outdated or limited", points: 20 },
+      { emoji: "gear", label: "An ERP, but outdated or limited", points: 15 },
       {
         emoji: "rocket",
         label: "A modern integrated system already",
-        points: 60,
+        points: 20,
       },
       { emoji: "other", label: "Other", isOther: true, points: 0 },
     ],
